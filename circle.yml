@@ -18,7 +18,6 @@ dependencies:
 test:
   override:
     - make test
-    - make build-image
     - make binaries
 
 deployment:

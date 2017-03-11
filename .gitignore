@@ -4,5 +4,3 @@
 
 # The docker-based builds will keep working files here
 docker/*
-!docker/Dockerfile
-!docker/Dockerfile.build

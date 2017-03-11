@@ -1,4 +1,4 @@
-.PHONY: setup test build-image binaries image
+.PHONY: setup test binaries image
 
 IMAGE_NAME ?= example/hello
 
@@ -11,23 +11,16 @@ setup:
 test:
 	stack test
 
-# A docker image for compilation
-build-image:
-	docker build \
-	  --tag "$(IMAGE_NAME)-build" \
-	  --file docker/Dockerfile.build .
-
-# Compile the binaries into docker/bin using the build image
+# Compile the binaries into docker/bin using the fpco/stack-build image
 binaries:
 	docker run --rm \
+	  --env LANG=en_US.UTF-8 \
 	  --volume "$(PWD)":/src:ro \
 	  --volume "$(PWD)"/docker/bin:/root/.local/bin \
 	  --volume "$(PWD)"/docker/stack:/root/.stack \
 	  --volume "$(PWD)"/docker/stack-work:/src/.stack-work \
-	  "$(IMAGE_NAME)-build" sh -c "stack setup && stack install"
+	  fpco/stack-build:lts sh -c "cd /src && stack setup && stack install"
 
 # Build a runtime image with the built binaries, but no compilation environment
 image:
-	docker build \
-	  --tag "$(IMAGE_NAME)" \
-	  --file docker/Dockerfile .
+	docker build --tag "$(IMAGE_NAME)" .

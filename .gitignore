@@ -1,0 +1,8 @@
+# Pre-create this directory to avoid docker mounts creating it as root-owned
+.stack-work/
+!.stack-work/.gitkeep
+
+# The docker-based builds will keep working files here
+docker/*
+!docker/Dockerfile
+!docker/Dockerfile.build

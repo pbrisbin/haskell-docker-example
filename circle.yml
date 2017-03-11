@@ -1,0 +1,29 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/.stack"
+    - ".stack-work"
+    - "docker/stack"
+    - "docker/stack-work"
+  pre:
+    - wget https://github.com/commercialhaskell/stack/releases/download/v1.3.2/stack-1.3.2-linux-x86_64.tar.gz -O /tmp/stack.tar.gz
+    - tar xvzOf /tmp/stack.tar.gz stack-1.3.2-linux-x86_64/stack > /tmp/stack
+    - chmod +x /tmp/stack && sudo mv /tmp/stack /usr/bin/stack
+  override:
+    - make setup
+
+test:
+  override:
+    - make test
+    - make build-image
+    - make binaries
+
+deployment:
+  registry:
+    branch: master
+    commands:
+      - make image
+      - echo "docker login, tag, & push"

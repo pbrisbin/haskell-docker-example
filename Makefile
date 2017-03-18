@@ -19,7 +19,8 @@ binaries:
 	  --volume "$(PWD)"/docker/bin:/root/.local/bin \
 	  --volume "$(PWD)"/docker/stack:/root/.stack \
 	  --volume "$(PWD)"/docker/stack-work:/src/.stack-work \
-	  fpco/stack-build:lts sh -c "cd /src && stack install --system-ghc"
+	  --workdir /src \
+	  fpco/stack-build:lts stack install --system-ghc
 
 # Build a runtime image with the built binaries, but no compilation environment
 image:

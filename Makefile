@@ -8,20 +8,10 @@ setup:
 	stack build --fast
 	stack build --fast --test --no-run-tests
 
+# And testing
 test:
 	stack test
 
-# Compile the binaries into docker/bin using the fpco/stack-build image
-binaries:
-	docker run --rm \
-	  --env LANG=en_US.UTF-8 \
-	  --volume "$(PWD)":/src:ro \
-	  --volume "$(PWD)"/docker/bin:/root/.local/bin \
-	  --volume "$(PWD)"/docker/stack:/root/.stack \
-	  --volume "$(PWD)"/docker/stack-work:/src/.stack-work \
-	  --workdir /src \
-	  fpco/stack-build:lts stack install --system-ghc
-
-# Build a runtime image with the built binaries, but no compilation environment
+# Multi-stage build to produce executables into a runtime image
 image:
 	docker build --tag "$(IMAGE_NAME)" .

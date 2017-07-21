@@ -1,9 +1,3 @@
-# Ignore everything by default
-*
-
-# Executables
-!docker/bin/hello
-
-# Support files
-# !config
-# !static
+.dockerignore
+.stack-work
+Dockerfile
